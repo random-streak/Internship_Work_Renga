@@ -2,111 +2,80 @@
 
 This repository contains the full workflow to:
 - Clean and prepare imbalance and price data  
-- Analyse how forecasts evolve vs. actuals  
-- Test assumptions on long/short grid conditions  
-- Build simple models to predict grid state  
-- Evaluate revenue and penalty outcomes under different bidding strategies  
+# Renga Work — Project Overview
+
+This repository contains notebooks, scripts and sample data used for analysing imbalance forecasts, predicting grid state (long/short), and evaluating revenue & penalty outcomes under different bidding strategies.
+
+**Recent changes:**
+- Many notebooks were reorganised under `final_versions/`.
+- Example output datasets were added under `sample_results/`.
+- New `final_versions/Penalty/` notebooks and analysis files were added.
+- A new remote repository was created and pushed to: `https://github.com/random-streak/Internship_Work_Renga.git`.
 
 ---
 
-## Code Flow
+**Quick summary**
 
-The typical flow through the repository is:
-
-1. **Data cleaning**
-2. **Forecast vs. actual analysis (per timestamp and over ranges)**
-3. **Check long/short price pattern assumption**
-4. **Predict grid state (classification models)**
-5. **Revenue & penalty analysis for different P-values and strategies**
-
-Each step is mapped to specific notebooks/scripts as described below.
+- **Purpose:** Analyse forecast vs actuals, build simple grid-state prediction models, and evaluate economic outcomes (revenue & penalty).
+- **Primary language:** Python (notebooks + small scripts)
+- **Environment:** Uses a virtual environment; install dependencies from `requirements.txt`.
 
 ---
 
-## 1. Data Cleaning
+**Repository layout (high level)**
 
-These files prepare the raw data for all subsequent analyses:
-
-- **`data_clean_v2.ipynb`**  
-  Main notebook for loading, cleaning, and transforming the raw datasets into a consistent format used by the analysis and modelling notebooks.
-
-- **`dummy1.py`**  
-  Python script version of (parts of) the cleaning logic, useful for batch runs or integration into other workflows.
-
----
-
-## 2. Forecast vs. Actual Analysis
-
-These notebooks explore how forecasts evolve over the last 48 hours before delivery and compare them to actual values, both at single timestamps and over ranges:
-
-- **`analysis_per_ts.ipynb`**  
-  Visualizes the evolution of forecasts over the last 48 hours for a **single target timestamp**, together with the actual value.
-
-- **`analysis_range.ipynb`**  
-  Extends the above idea to **a range of timestamps**, enabling analysis of patterns over multiple consecutive time steps.
-
-- **`analysis_v3.ipynb`**  
-  Iterative version of the analysis with additional views/metrics on forecast vs. actual behaviour.
-
-- **`analysis_v5.ipynb`**  
-  Further refined analysis, adding more robust visualizations and/or metrics for the forecast evolution.
-
-- **`evolution_analysis.ipynb`**  
-  Focused on the **temporal evolution** of forecasts in the last 48 hours before delivery, with aggregated views over time.
+- `data/` : Raw and intermediate datasets (subfolders for `neoen` and `sunnic`).
+- `analysis/` : Exploratory analysis notebooks.
+- `final_versions/` : Reorganized final notebooks and analyses (penalty, grid state prediction, etc.).
+- `data_process/` : Data cleaning notebooks and helper scripts.
+- `sample_results/` : Example output CSVs produced by analyses.
+- `scripts/` : Helper shell scripts (e.g. `setup_and_run.sh`).
+- `requirements.txt` : Python dependencies list.
 
 ---
 
-## 3. Long/Short Pattern Assumption
+**Getting started (minimal)**
 
-This notebook checks a specific assumption about price signals and grid state:
+1. Create a virtual environment and install dependencies (recommended):
 
-- **`long_short_pattern.ipynb`**  
-  A short analysis that tests the hypothesis:  
-  - If **positive and negative imbalance prices are higher than the day-ahead price**, the grid is considered **short**.  
-  - If **imbalance prices are lower than the day-ahead price**, the grid is considered **long**.  
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-It evaluates how acceptable this assumption is on historical data.
+2. Open the notebook server:
 
----
+```bash
+jupyter lab
+```
 
-## 4. Grid State Prediction Models
+3. Recommended notebook order (pipeline):
 
-These notebooks build models to predict whether the grid is in a long or short state:
-
-- **`predict_imb_n-1hr.ipynb`**  
-  Model predicting the grid state using information up to **one hour before delivery**.  
-  - Achieved accuracy: **~74.23%** (based on sign correctness between actual and predicted state).
-
-- **`predict_imb_tod.ipynb`**  
-  Model predicting the grid state using **time-of-day and related features**.  
-  - Achieved accuracy: **~57.23%**.
-
-These models are later used as inputs to strategy and penalty simulations.
+- `data_process/data_clean_v2.ipynb` — prepare and standardise raw data
+- `analysis/analysis_per_ts.ipynb` & `analysis/analysis_range.ipynb` — forecast vs actual exploration
+- `final_versions/grid_state_pred/predict_imb_n-1hr.ipynb` — grid state model
+- `final_versions/Penalty/Penalty_Analysis_final.ipynb` — revenue & penalty analysis
 
 ---
 
-## 5. Revenue & Penalty Analysis
+**Sample script**
 
-These notebooks evaluate how revenues and penalties change under different bidding strategies and P-values:
-
-- **`penalty_v1.ipynb`**  
-  Baseline implementation to compute **revenues and penalties** as a function of different P-values (bid volumes / quantiles), helping understand the impact of under- and over-production.
-
-- **`penalty_v2.ipynb`**  
-  Extended version that:  
-  - Explores **combinational strategies** (e.g., different P-values depending on predicted grid state).  
-  - Shows how **net revenue (revenue + penalty)** evolves across strategies.
+Use `scripts/setup_and_run.sh` to create the virtual environment (if missing), install dependencies, and launch `jupyter lab` from the repository root. See the script for details.
 
 ---
 
-## Suggested Reading Order
+**Notes & tips**
 
-If you are new to the project, a good order is:
+- Large CSVs and many generated forecast files are present under `data/` — avoid committing large, regenerate-able files to the remote unless necessary.
+- If you pushed this repository to a new remote (e.g. `internship`), you can keep the original `origin` remote alongside it to sync between repositories.
 
-1. `data_clean_v2.ipynb`  
-2. `analysis_per_ts.ipynb` / `analysis_range.ipynb` / `evolution_analysis.ipynb`  
-3. `long_short_pattern.ipynb`  
-4. `predict_imb_n-1hr.ipynb` and `predict_imb_tod.ipynb`  
-5. `penalty_v1.ipynb` and `penalty_v2.ipynb`
+---
 
-This follows the logical pipeline from raw data → understanding → prediction → strategy & economics.
+If you want, I can:
+
+- Commit this README and the sample script for you.
+- Add a small `.gitignore` entry to exclude large data files under `data/`.
+- Create a short CONTRIBUTING.md describing how to run analyses reproducibly.
+
