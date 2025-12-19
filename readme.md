@@ -131,11 +131,11 @@ This folder stores the **processed outputs** used in the analysis and in the pre
 
 ---
 
-### 8. `Presentations/` – Slides
+### 8. `Presentations` – Slides
 
 Contains three PDF presentations given at different stages of the internship, summarising:
 
-- The methodology and gradual evolution of the study  
+- The methodology and gradual evolution of the study - (Attached as .pdf files with the names starting as 01, 02 & 03 representing the order)
 - Key intermediate and final results  
 - Discussion of implications for market participation and regulation  
 
