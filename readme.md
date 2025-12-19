@@ -131,7 +131,7 @@ This folder stores the **processed outputs** used in the analysis and in the pre
 
 ---
 
-### 8. `presentation/` – Slides
+### 8. `Presentations/` – Slides
 
 Contains three PDF presentations given at different stages of the internship, summarising:
 
